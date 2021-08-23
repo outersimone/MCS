@@ -372,4 +372,3 @@ def response(delta_t=0.025):
 
 if __name__ == '__main__':
     rocket()
-
