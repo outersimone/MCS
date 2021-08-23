@@ -88,7 +88,7 @@ def rocket(delta_t=0.025):
     r_mass = 1000                        # Mass of fuel
     rho_0 = 1.2754                       # Initial density of air
 
-    #print(delta_m)
+    # print(delta_m)
     vx_sched = np.ones(int(-mass/delta_m))*.45
     vy_sched = np.ones(int(-mass/delta_m))*.45
     vz_sched = np.ones(int(-mass/delta_m))*0.1
