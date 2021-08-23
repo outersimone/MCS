@@ -1,3 +1,4 @@
+
 import numpy as np
 from numba import jit
 from enemy import rocket as enemy_rocket
@@ -5,6 +6,7 @@ from response import response as response_rocket
 from multiprocessing import Process
 from matplotlib import pyplot as plt
 import os
+
 
 def plot2():
     # Load enemy data
@@ -32,8 +34,8 @@ def plot2():
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
 
-        #if i < len(px):
-            #ax.scatter(px[i], py[i], pz[i])  # , label="ENEMY ROCKET PROJECTION {}".format(i))
+        # if i < len(px):
+        # ax.scatter(px[i], py[i], pz[i])  # , label="ENEMY ROCKET PROJECTION {}".format(i))
 
         # Plot detection hemisphere
         radius = 1500
@@ -43,9 +45,9 @@ def plot2():
         dome_y = radius * np.sin(phi) * np.sin(theta) + origin[1]
         dome_z = radius * np.cos(phi)
 
-        color = 'g' if(np.sqrt((ex[i]-origin[0])**2 + \
-                                      (ey[i]-origin[1])**2 + \
-                                      (ez[i])**2) < radius) else 'b'
+        color = 'g' if (np.sqrt((ex[i] - origin[0]) ** 2 + \
+                                (ey[i] - origin[1]) ** 2 + \
+                                (ez[i]) ** 2) < radius) else 'b'
 
         print("{} PLOTTING DOME, COLOR: {}".format(i, color))
         ax.plot_surface(dome_x, dome_y, dome_z, alpha=0.15, color=color)
@@ -79,7 +81,6 @@ def plot_enemy_projection():
     """for i, j in enumerate(zip(ex, ey, ez)):
         print(i, j)"""
 
-
     fig = plt.figure()
     print("PLOTTING ENEMY")
     ax = fig.add_subplot(111, projection='3d')
@@ -91,11 +92,11 @@ def plot_enemy_projection():
     max_proj = max([int(s.split('_')[2].split('.')[0]) for s in projections])
 
     # Plot projections
-    for i in range(max_proj+1):
+    for i in range(max_proj + 1):
         px = np.loadtxt("./parallel_test/proj_x_{}.txt".format(i))
         py = np.loadtxt("./parallel_test/proj_y_{}.txt".format(i))
         pz = np.loadtxt("./parallel_test/proj_z_{}.txt".format(i))
-        ax.plot(px, py, pz, alpha=0.25) #, label="ENEMY ROCKET PROJECTION {}".format(i))"""
+        ax.plot(px, py, pz, alpha=0.25)  # , label="ENEMY ROCKET PROJECTION {}".format(i))"""
 
     """# Plot aim points
     print("PLOTTING AIM POINTS")
@@ -126,28 +127,28 @@ def plot_enemy_projection():
     print(len(dist_to_enemy))
     print(f"CLOSEST DISTANCE: {min(dist_to_enemy)} at index {hit_index}")
 
-    print(f'{ex[hit_index+ first_detection]} {ey[hit_index+ first_detection]} {ez[hit_index+ first_detection]}')
+    print(f'{ex[hit_index + first_detection]} {ey[hit_index + first_detection]} {ez[hit_index + first_detection]}')
     print(f'{r_x[hit_index]} {r_y[hit_index]} {r_z[hit_index]}')
 
-    ax.plot(ex[:hit_index+first_detection], ey[:hit_index+first_detection], ez[:hit_index+first_detection], color='r', label="ENEMY ROCKET")
+    ax.plot(ex[:hit_index + first_detection], ey[:hit_index + first_detection], ez[:hit_index + first_detection],
+            color='r', label="ENEMY ROCKET")
     ax.plot(r_x[:hit_index], r_y[:hit_index], r_z[:hit_index], color='blue', label="RESPONSE ROCKET")
-
 
     # Plot detection hemisphere
     print("PLOTTING DOME")
     radius = 1500
     origin = [2000, 2000]
-    phi, theta = np.mgrid[0.0:0.5*np.pi:180j, 0.0:2.0*np.pi:720j]
-    dome_x = radius*np.sin(phi)*np.cos(theta) + origin[0]
-    dome_y = radius*np.sin(phi)*np.sin(theta) + origin[1]
-    dome_z = radius*np.cos(phi)
+    phi, theta = np.mgrid[0.0:0.5 * np.pi:180j, 0.0:2.0 * np.pi:720j]
+    dome_x = radius * np.sin(phi) * np.cos(theta) + origin[0]
+    dome_y = radius * np.sin(phi) * np.sin(theta) + origin[1]
+    dome_z = radius * np.cos(phi)
     ax.plot_surface(dome_x, dome_y, dome_z, alpha=0.15, color='g')
 
     ground_theta = np.linspace(0, 2 * np.pi, 100)
     ground_x = radius * np.cos(ground_theta) + origin[0]
     ground_y = radius * np.sin(ground_theta) + origin[1]
     ax.plot(ground_x, ground_y, alpha=0.5, color='g')
-    #ax.set(zlim=(0, max(max(ez), max(pz))))
+    # ax.set(zlim=(0, max(max(ez), max(pz))))
     ax.set(zlim=(0, max(ez)))
 
     ax.legend(loc='best')
@@ -159,7 +160,7 @@ def test_enemy_and_response():
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    #delta_t = 0.025
+    # delta_t = 0.025
     p1 = Process(target=enemy_rocket)
     p1.start()
     p2 = Process(target=response_rocket)
@@ -172,4 +173,3 @@ if __name__ == '__main__':
     test_enemy_and_response()
     plot_enemy_projection()
     plot2()
-
